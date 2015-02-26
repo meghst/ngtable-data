@@ -1,0 +1,71 @@
+<div>
+    <h2>{{title}}</h2>
+</div>
+
+<!-- 
+<div>
+
+    <table class="table table-hover table-list">
+
+        <tr>
+            <th ng-repeat="key in keys">{{key | uppercase}}</th>
+        </tr>
+
+        <tr ng-repeat="entity in entities | orderBy : 'name'">
+            <td ng-repeat="key in keys">{{ entity[key] }}</td>
+        </tr>
+
+    </table>
+
+</div>
+-->
+<!-- Table header template-->
+<script id="header_template" type="text/ng-template">
+          <tr>
+              <th ng-repeat="column in columns" ng-show="column.visible"
+                  class="text-center sortable" ng-class="{
+                      'sort-asc': tableParams.isSortBy(column.field, 'asc'),
+                      'sort-desc': tableParams.isSortBy(column.field, 'desc')
+                    }"
+                  ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')" >
+                  {{column.title}}
+              </th>
+              <!--<th>Columns:{{columns.length}}</th>-->
+          </tr>
+          <tr>
+            <th ng-repeat="column in columns" ng-show="column.visible"
+          </tr>
+</script>
+
+<div class="row" ng-show="showTable">
+  Columns:
+    <div style="width:100%">
+          <span ng-repeat="column in columns">
+            <input  type="checkbox" ng-model="column.visible" style="margin-left:10px"/> {{column.title}}
+          </span>
+
+    </div>
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div>
+        <input type="text" ng-model="search.$" placeholder="Filter Page">
+          <table ng-table="tableParams" show-filter="true" class="table" template-header="header_template" show-filter="true"  export-csv="csv" >
+            <tbody>
+              <tr ng-repeat="location in $data | filter:search">
+                <td ng-repeat="column in columns" ng-show="column.visible" sortable="column.field">
+                  {{location[column.field]}}
+                </td>                       
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <a class="btn btn-primary" ng-click='csv.generate($event, "my-file.csv")' href='#' >
+              Export to CSV
+    </a>
+  </div>
+</div>
